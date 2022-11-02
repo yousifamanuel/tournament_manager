@@ -80,6 +80,7 @@
                      <div class="form-group">
                       <label for="player1">Spieler 1</label>
                       <select name="player1" id="player1">
+                        <option>Spieler wählen</option>
                         <?php
                         $sql = "SELECT name FROM Player";
                         $result = $conn->query($sql);
@@ -93,6 +94,7 @@
                         ?>
                       </select>
                       <select name="player2" id="player2">
+                        <option>Spieler wählen</option>
                         <?php
                         $sql = "SELECT name FROM Player";
                         $result = $conn->query($sql);
