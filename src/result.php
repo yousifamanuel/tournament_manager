@@ -82,7 +82,7 @@
                       <select name="player1" id="player1">
                         <option>Spieler:in wählen</option>
                         <?php
-                        $sql = "SELECT name FROM Player";
+                        $sql = "SELECT name FROM Player ORDER BY NAME";
                         $result = $conn->query($sql);
 
                         if ($result->num_rows > 0) {
@@ -96,7 +96,7 @@
                       <select name="player2" id="player2">
                         <option>Spieler:in wählen</option>
                         <?php
-                        $sql = "SELECT name FROM Player";
+                        $sql = "SELECT name FROM Player ORDER BY NAME";
                         $result = $conn->query($sql);
 
                         if ($result->num_rows > 0) {
