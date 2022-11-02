@@ -72,7 +72,7 @@
 
           <div class="container">
             <div class="row justify-content-center">
-              <div class="col-6">
+              <div class="col-8">
                 <div class="card mask-custom">
                   <div class="card-body">
                     <h4 class="text-center">Ergebnis</h4>
