@@ -31,6 +31,7 @@
     </nav>
 
     <?php
+
     $servername = "db";
     $username = "root";
     $password = "password";
@@ -38,32 +39,34 @@
 
 // Create connection
     $conn = new mysqli($servername, $username, $password, $dbname);
+    $pageWasRefreshed = isset($_SERVER['HTTP_CACHE_CONTROL']) && $_SERVER['HTTP_CACHE_CONTROL'] === 'max-age=0';
 
-    $p1 = $_REQUEST['player1'];
-    $p2 = $_REQUEST['player2'];
+    if(!$pageWasRefreshed ) {
+        $p1 = $_REQUEST['player1'];
+        $p2 = $_REQUEST['player2'];
 
-    $strSQL = "SELECT ID FROM ttdb.Player where name='$p1'limit 1";
-    $result = $conn->query($strSQL);
-    $row = $result->fetch_assoc();
-    $p1_id = $row['ID'];
+        $strSQL = "SELECT ID FROM ttdb.Player where name='$p1'limit 1";
+        $result = $conn->query($strSQL);
+        $row = $result->fetch_assoc();
+        $p1_id = $row['ID'];
 
-    $strSQL = "SELECT ID FROM ttdb.Player where name='$p2'limit 1";
-    $result = $conn->query($strSQL);
-    $row = $result->fetch_assoc();
-    $p2_id = $row['ID'];
+        $strSQL = "SELECT ID FROM ttdb.Player where name='$p2'limit 1";
+        $result = $conn->query($strSQL);
+        $row = $result->fetch_assoc();
+        $p2_id = $row['ID'];
 
-    $sets_p1 = $_REQUEST['sets_p1'];
-    $sets_p2 = $_REQUEST['sets_p2'];
+        $sets_p1 = $_REQUEST['sets_p1'];
+        $sets_p2 = $_REQUEST['sets_p2'];
 
-    $winner = $p1_id;
-    if ($sets_p2 > $sets_p1)
-      $winner = $p2_id;
+        $winner = $p1_id;
+        if ($sets_p2 > $sets_p1)
+          $winner = $p2_id;
 
-    $points_p1 = $_REQUEST['points_p1'];
-    $points_p2 = $_REQUEST['points_p2'];
+        $points_p1 = $_REQUEST['points_p1'];
+        $points_p2 = $_REQUEST['points_p2'];
 
-    $conn->query("INSERT INTO Match_Results (Player1_id, Player2_id, Winner, Sets_p1, Sets_p2, Points_p1, Points_p2) VALUES ('$p1_id', '$p2_id', '$winner', '$sets_p1', '$sets_p2', '$points_p1', '$points_p2')");
-
+        $conn->query("INSERT INTO Match_Results (Player1_id, Player2_id, Winner, Sets_p1, Sets_p2, Points_p1, Points_p2) VALUES ('$p1_id', '$p2_id', '$winner', '$sets_p1', '$sets_p2', '$points_p1', '$points_p2')");
+      }
     function request_result($group_no)
     {
       return "select name, sum(CASE WHEN p.id = mr.PLAYER1_ID or p.id = PLAYER2_ID THEN 1 ELSE 0 END) as matches,
@@ -76,7 +79,7 @@
       on p.id = mr.PLAYER1_ID
       or p.id = PLAYER2_ID
       where p.group = $group_no
-      group by name order by name, wins desc, setsW desc, pointsW desc";
+      group by name order by wins desc, (setsW - setsL) desc, (pointsW - pointsL) desc, name";
     }
 
     ?>
